@@ -1,13 +1,532 @@
+:root {
+    --navBarHight: 56px;
+    --navBarBackgorundColor: #FFFFFF;
+    --NavBarGray: #091E4224;
+}
+
+/** {*/
+/*    margin: 0;*/
+/*    padding: 0;*/
+/*    box-sizing: border-box;*/
+/*}*/
+
 body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+.container {
+    /*height: 100vh;*/
+    margin-top: 20px;
+    margin-bottom: 20px;
+    margin-left: 5%;
+    margin-right: 5%;
+    /*margin: 5%;*/
+
+}
+
+nav {
+    height: var(--navBarHight);
+    border-bottom: 1px solid var(--NavBarGray);
+    background-color: var(--navBarBackgorundColor);
+    padding: 0;
+    margin: 0;
+    display: block;
+}
+
+.nav-container {
+    height: var(--navBarHight);
+    border-bottom: 1px solid var(--NavBarGray);
+    background-color: var(--navBarBackgorundColor);
+    padding: 0;
+    margin: 0;
+    margin-left: 20px;
+    margin-right: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 3;
+}
+
+.nav-container ul {
+    padding: 0;
+    margin: 0;
+}
+
+.nav-container li {
+    display: inline-block;
+}
+
+.link {
+    text-decoration: none;
+    border-radius: 5px;
+    color: black;
+    padding: 5px;
+    margin: 5px;
+    cursor: pointer;
+}
+
+.link:hover {
+    background-color: var(--NavBarGray);
+}
+
+.activate {
+    border-bottom: 2px solid #0C66E4;
+}
+
+.nav-box {
+    display: flex;
+    position: fixed;
+    top: 54px;
+    right: 10px;
+    width: 100px;
+    height: 100px;
+    z-index: 4;
+    border-radius: 3px;
+    border: 1px solid var(--NavBarGray);
+    background-color: var(--navBarBackgorundColor);
+    box-shadow: 0 8px 12px #091E4226;
+    padding: 0;
+    margin: 0;
+}
+
+.nav-box-container {
+    display: block;
+    width: 100%;
+    align-items: center;
+}
+
+.nav-box-container hr {
+    padding: 0;
+    margin: 0;
+    border: 1px solid var(--NavBarGray);
+}
+
+.nav-box-container div {
+    display: flex;
+    padding: 0;
+    padding-left: 15px;
+    margin: 0;
+    margin-top: 3px;
+    margin-bottom: 3px;
+    height: 43%;
+    align-items: center;
+    cursor: pointer;
+}
+
+.nav-box-container div:hover {
+    background-color: var(--NavBarGray);
+}
+
+.nav-logo {
+    color: #000000;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.project-add {
+    margin: 0;
+    padding: 0;
+    position: fixed;
+    display: flex;
+    width: 80px;
+    height: 80px;
+    bottom: 30px;
+    right: 30px;
+    background-color: #FFFFFF;
+    border: 1px solid #0C66E4;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+    border-radius: 50px;
+    font-size: 70px;
+    color: #0C66E4;
+    z-index: 2;
+    cursor: pointer;
+}
+
+.project-search {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.project-search input {
+    border-radius: 5px;
+    border: 2px solid #44546F;
+    width: 220px;
+    height: 40px;
+    font-size: 15px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.project-container {
+    padding-left: 20px;
+    padding-right: 20px;
+    height: 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    /*margin-right: 30px;*/
+    /*margin-left: 30px;*/
+    border-bottom: 2px solid var(--NavBarGray);
+    cursor: pointer;
+}
+
+.project-container:hover {
+    background-color: var(--NavBarGray);
+}
+
+.project-container div {
+    width: 30%;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+/*[로그인*/
+
+.login-container {
+    background-color: #fff;
+    border-radius: 30px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
+    position: relative;
+    overflow: hidden;
+    width: 768px;
+    max-width: 100%;
+    min-height: 580px;
+}
+
+.container p {
+    font-size: 14px;
+    line-height: 20px;
+    letter-spacing: 0.3px;
+    margin: 20px 0;
+}
+
+.login-container a {
+    color: #333;
+    font-size: 13px;
+    text-decoration: none;
+    margin: 15px 0 10px;
+}
+
+.login-container button {
+    background-color: #071952;
+    color: #fff;
+    font-size: 12px;
+    padding: 10px 45px;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+.login-container button.hidden {
+    background-color: transparent;
+    border-color: #fff;
+}
+
+.login-container form {
+    background-color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 0 40px;
+    height: 100%;
+}
+
+.login-container input {
+    background-color: #eee;
+    border: none;
+    margin: 8px 0;
+    padding: 10px 15px;
+    font-size: 13px;
+    border-radius: 8px;
+    width: 100%;
+    outline: none;
+}
+
+.form-container {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    transition: all 0.6s ease-in-out;
+}
+
+.sign-in {
+    left: 0;
+    width: 50%;
+    z-index: 2;
+}
+
+.login-container.active .sign-in {
+    transform: translateX(100%);
+}
+
+.sign-up {
+    left: 0;
+    width: 50%;
+    opacity: 0;
+    z-index: 1;
+}
+
+.login-container.active .sign-up {
+    transform: translateX(100%);
+    opacity: 1;
+    z-index: 5;
+    animation: move 0.6s;
+}
+
+@keyframes move {
+    0%, 49.99% {
+        opacity: 0;
+        z-index: 1;
+    }
+    50%, 100% {
+        opacity: 1;
+        z-index: 5;
+    }
+}
+
+.social-icons {
+    margin: 20px 0;
+}
+
+.social-icons a {
+    border: 1px solid #ccc;
+    border-radius: 20%;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 3px;
+    width: 40px;
+    height: 40px;
+}
+
+.toggle-container {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 50%;
+    height: 100%;
+    overflow: hidden;
+    transition: all 0.6s ease-in-out;
+    border-radius: 150px 0 0 100px;
+    z-index: 1000;
+}
+
+.login-container.active .toggle-container {
+    transform: translateX(-100%);
+    border-radius: 0 150px 100px 0;
+}
+
+.toggle {
+    background: linear-gradient(to right, #3876BF, #192655);
+    color: #fff;
+    position: relative;
+    left: -100%;
+    height: 100%;
+    width: 200%;
+    transform: translateX(0);
+    transition: all 0.6s ease-in-out;
+}
+
+.login-container.active .toggle {
+    transform: translateX(50%);
+}
+
+.toggle-panel {
+    position: absolute;
+    width: 50%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 0 30px;
+    text-align: center;
+    top: 0;
+    transform: translateX(0);
+    transition: all 0.6s ease-in-out;
+}
+
+.toggle-left {
+    transform: translateX(-200%);
+}
+
+.login-container.active .toggle-left {
+    transform: translateX(0);
+}
+
+.toggle-right {
+    right: 0;
+    transform: translateX(0);
+}
+
+.login-container.active .toggle-right {
+    transform: translateX(200%);
+}
+
+.login-box {
+    display: flex;
+    justify-content: center;
+}
+
+/*로그인]*/
+
+/*[프로젝트, 공지사항, 작업 등 공통*/
+.container-common {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    /*background-color: red;*/
+}
+
+.container-common div {
+    width: 50%;
+    /*background-color: violet;*/
+}
+
+.container-common div h1 {
+    text-align: center;
+}
+
+.container-common div h3 {
+    text-align: center;
+}
+
+.container-common div textarea {
+    box-sizing: border-box;
+    width: 100%;
+    border-radius: 10px;
+    text-align: left;
+    padding: 2%;
+    border: solid 1px var(--NavBarGray);
+    font-size: 15px;
+}
+
+.container-common div button {
+    width: 100%;
+    text-align: center;
+    font-size: 17px;
+    height: 40px;
+    cursor: pointer;
+    border-radius: 5px;
+    border: 0.5px solid black;
+}
+
+.container-common div input {
+    box-sizing: border-box;
+    width: 100%;
+    border-radius: 5px;
+    border: 1px solid #44546F;
+    height: 40px;
+    font-size: 15px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.ok-common {
+    background-color: #0C66E4;
+    font-weight: bold;
+    color: #FFFFFF;
+    cursor: pointer;
+}
+
+.ok-common:hover {
+    background-color: #0a50b2;
+}
+
+.cancel-common {
+    background-color: #E0E0E0;
+    color: #000000;
+    cursor: pointer;
+}
+
+.cancel-common:hover {
+    background-color: #C0C0C0;
+}
+
+.del-common {
+    background-color: #FF3333;
+    color: #FFFFFF;
+    cursor: pointer;
+}
+
+.del-common:hover {
+    background-color: #FF0000;
+}
+
+.container-common-input {
+    box-sizing: border-box;
+    width: 100%;
+    border-radius: 5px;
+    border: 1px solid #44546F;
+    height: 40px;
+    font-size: 15px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+/*프로젝트, 공지사항, 작업 등 공통]*/
+
+.container-timeline {
+    position: relative;
+    justify-content: center;
+    width: 100%;
+    border-left: solid 2px var(--NavBarGray);
+    border-right: solid 2px var(--NavBarGray);
+    overflow-x: scroll;
+}
+
+.container-timeline-div {
+    box-sizing: border-box;
+    display: flex;
+    border: 1px solid var(--NavBarGray);
+}
+
+.container-timeline-div-div {
+    border: solid #9F8FEF;
+    box-sizing: border-box;
+    display: flex;
+    position: relative;
+    font-size: 10px;
+    text-align: center;
+    background-color: #9F8FEF;
+    color: #FFFFFF;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    border-radius: 3px;
+    height: 30px;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.timeline-month-marker {
+    position: absolute;
+    height: 100%;
+    border-left: 1px solid #ccc; /* 세로 줄 스타일 */
+}
+
+.timeline-date-label {
+    z-index: 10; /* z-index를 적당한 값으로 설정 */
+    position: absolute;
+    bottom: 0;
+    font-size: 10px;
+    /* 추가적인 스타일링 */
 }
