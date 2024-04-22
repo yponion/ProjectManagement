@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import axios from "axios";
-import { setTaskNum } from "../store/numSlice";
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import {setTaskNum} from "../store/numSlice";
+import {useDispatch} from "react-redux";
+import {useNavigate} from "react-router-dom";
+import {dateFormat} from "../utils/dateFormat";
 
 const ProjectTimelinePage = () => {
     const [projectName, setProjectName] = useState('');
@@ -14,15 +15,15 @@ const ProjectTimelinePage = () => {
 
     useEffect(() => {
         axios.get(`/api/project/${localStorage.getItem('projectNum')}`).then((res) => {
-            setProjectName(res.data.data.projectName);
-            setProjectStart(res.data.data.startDate);
-            setProjectEnd(res.data.data.lastDate);
+            setProjectName(res.data.project.title);
+            setProjectStart(dateFormat(res.data.project.start));
+            setProjectEnd(dateFormat(res.data.project.end));
         }).catch(e => {
             console.log('대시보드 정보 가져오지 못함');
         });
 
         axios.get(`/api/project/task/list/${localStorage.getItem('projectNum')}`).then((res) => {
-            const sortedTasks = res.data.data.sort((a, b) =>
+            const sortedTasks = res.data.tasks.sort((a, b) =>
                 new Date(a.startDate) - new Date(b.startDate)
             );
             setTaskList(sortedTasks);
@@ -77,8 +78,8 @@ const ProjectTimelinePage = () => {
                     </div>
                 ))}
                 {taskList.map((task, index) => {
-                    const ts = oneDayTo10px(task.startDate) - ps;
-                    const tl = oneDayTo10px(task.lastDate) - oneDayTo10px(task.startDate);
+                    const ts = oneDayTo10px(task.start) - ps;
+                    const tl = oneDayTo10px(task.end) - oneDayTo10px(task.start);
 
                     return (
                         <div
@@ -95,11 +96,11 @@ const ProjectTimelinePage = () => {
                                     left: `${ts}px`,
                                 }}
                                 onClick={() => {
-                                    dispatch(setTaskNum(task.taskId));
+                                    dispatch(setTaskNum(task._id));
                                     navigate('/project/task/edit');
                                 }}
                             >
-                                {task.content}
+                                {task.title}
                             </div>
                         </div>
                     );

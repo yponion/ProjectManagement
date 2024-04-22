@@ -27,12 +27,12 @@ noticeRouter.post('/create/:projectId', async (req, res) => {
 // api projectId를 가진 공지 리스트 가져오기
 noticeRouter.get('/list/:projectId', async (req, res) => {
     try {
-        console.log('test')
+        // console.log('test')
         const {projectId} = req.params
         if (!isValidObjectId(projectId)) return res.status(400).send({err: "projectId is invalid"})
 
         const notices = await Notice.find({project: projectId}).sort({_id: -1})
-        console.log(notices)
+        // console.log(notices)
         return res.send({notices})
     } catch (err) {
         console.error(err)

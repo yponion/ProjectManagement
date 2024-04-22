@@ -3,4 +3,5 @@ module.exports = {
     ...require('./Project'),
     ...require('./Notice'),
     ...require('./Comment'),
+    ...require('./Task'),
 }

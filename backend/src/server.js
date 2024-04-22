@@ -1,8 +1,7 @@
 const express = require('express')
 const app = express()
-const {userRouter, projectRouter} = require('./routes')
+const {userRouter, projectRouter, noticeRouter, commentRouter, taskRouter} = require('./routes')
 const mongoose = require('mongoose')
-const {noticeRouter} = require("./routes/noticeRoute");
 // const cors = require('cors')
 
 const server = async () => {
@@ -21,6 +20,8 @@ const server = async () => {
         app.use('/api/user', userRouter)
         app.use('/api/project', projectRouter)
         app.use('/api/project/notice', noticeRouter)
+        app.use('/api/project/comment', commentRouter)
+        app.use('/api/project/task', taskRouter)
 
         app.listen(BACK_PORT, async () => {
             console.log(`server listening on port ${BACK_PORT}`)

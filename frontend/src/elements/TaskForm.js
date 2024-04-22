@@ -5,7 +5,7 @@ import axios from "axios";
 import useToast from "../hooks/toast";
 
 const TaskForm = ({editing}) => {
-    const [task, setTask] = useState('');
+    const [title, setTitle] = useState('');
     const [memo, setMemo] = useState('');
     const [start, setStart] = useState('');
     const [end, setEnd] = useState('');
@@ -17,8 +17,8 @@ const TaskForm = ({editing}) => {
 
     useEffect(() => {
         axios.get(`/api/project/${localStorage.getItem('projectNum')}`).then((res) => {
-            setProjectStart(res.data.data.startDate);
-            setProjectEnd(res.data.data.lastDate);
+            setProjectStart(res.data.project.start);
+            setProjectEnd(res.data.project.end);
         }).catch(e => {
             console.log('프로젝트 시작일 마감일 가져오지 못함');
         });
@@ -26,7 +26,7 @@ const TaskForm = ({editing}) => {
         if (editing) { // 수정 페이지일 경우에 값을 가져와서 띄워줌
             axios.get(`/api/project/task/${localStorage.getItem('taskNum')}`)
                 .then((res) => {
-                    setTask(res.data.data.content);
+                    setTitle(res.data.data.content);
                     setMemo(res.data.data.memo);
                     setStart(res.data.data.startDate);
                     setEnd(res.data.data.lastDate);
@@ -40,28 +40,28 @@ const TaskForm = ({editing}) => {
         e.preventDefault();
         if (editing) { // 작업 수정
             axios.put(`/api/project/task/edit/${localStorage.getItem('taskNum')}`, {
-                content: task,
+                content: title,
                 memo: memo,
                 startDate: start,
                 lastDate: end
             }).then((res) => {
                 navigate('/project/task');
                 addToast({
-                    text: task + ' 작업 수정됨'
+                    text: title + ' 작업 수정됨'
                 })
             }).catch(e => {
                 console.log('작업 내용 수정 실패')
             })
         } else { // 작업 등록
-            axios.post(`/api/project/task/${localStorage.getItem('projectNum')}/create`, {
-                content: task,
-                memo: memo,
-                startDate: start,
-                lastDate: end
+            axios.post(`/api/project/task/create/${localStorage.getItem('projectNum')}`, {
+                title,
+                memo,
+                start,
+                end
             }).then((res) => {
                 navigate('/project/task');
                 addToast({
-                    text: task + ' 작업 추가됨'
+                    text: title + ' 작업 추가됨'
                 })
 
             }).catch(e => {
@@ -76,8 +76,8 @@ const TaskForm = ({editing}) => {
                 <form onSubmit={handleSubmit}>
                     <h1>작업 {editing ? '수정' : '등록'}</h1>
                     <label>작업명</label>
-                    <input required type="text" value={task} onChange={(e) => {
-                        setTask(e.target.value)
+                    <input required type="text" value={title} onChange={(e) => {
+                        setTitle(e.target.value)
                     }}/>
                     <br/><br/>
                     <label>메모</label>
@@ -116,7 +116,7 @@ const TaskForm = ({editing}) => {
                         axios.delete(`/api/project/task/delete/${localStorage.getItem('taskNum')}`).then((res) => {
                             navigate('/project/task');
                             addToast({
-                                text: task + ' 작업 삭제됨'
+                                text: title + ' 작업 삭제됨'
                             })
                         }).catch(e => {
                             console.log('작업 삭제 실패')

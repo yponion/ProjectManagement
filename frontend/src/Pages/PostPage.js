@@ -18,15 +18,15 @@ const PostPage = () => {
     const {addToast} = useToast();
 
     const addComment = () => {
-        axios.post(`/api/project/dashboard/review/${localStorage.getItem('noticeNum')}`,
+        axios.post(`/api/project/comment/${localStorage.getItem('noticeNum')}`,
             {content: newComment},
             {headers: {'Authorization': `Bearer ${localStorage.getItem('isLoggedIn')}`}}).then((res) => {
             setComments([...comments, {
-                content: res.data.data.content,
-                writerName: res.data.data.writerName,
-                writingTime: res.data.data.writingTime,
-                reviewId: res.data.data.reviewId,
-                writer: res.data.data.writer,
+                content: res.data.comment.content,
+                name: res.data.comment.name,
+                date: dateFormat(res.data.comment.createdAt),
+                notice: res.data.comment.notice,
+                email: res.data.comment.email,
             }]);
             setNewComment('');
             window.scrollTo({
@@ -51,8 +51,8 @@ const PostPage = () => {
         })
 
         // 댓글 받아오기
-        axios.get(`/api/project/dashboard/review/${localStorage.getItem('noticeNum')}`).then((res) => {
-            setComments(res.data.data);
+        axios.get(`/api/project/comment/list/${localStorage.getItem('noticeNum')}`).then((res) => {
+            setComments(res.data.comments);
         }).catch(e => {
             console.log('댓글 받아오기 실패');
         })
@@ -187,19 +187,19 @@ const PostPage = () => {
             <div style={styles.commentSection}>
                 <h3>댓글</h3>
                 {comments.map((comment) => (
-                    <div key={comment.reviewId}
+                    <div key={comment._id}
                          style={styles.comment}
                     >
-                        <strong>{comment.writerName === null ? '알수없음' : comment.writerName}</strong>: <span
+                        <strong>{comment.name === null ? '알수없음' : comment.name}</strong>: <span
                         style={styles.commentContent}>{comment.content}</span>
-                        <span style={styles.commentDate}>{comment.writingTime}</span>
-                        {(comment.writer === email) && <button
+                        <span style={styles.commentDate}>{comment.date}</span>
+                        {(comment.email === email) && <button
                             style={styles.xButton}
                             onClick={() => {
-                                axios.delete(`/api/project/dashboard/review/${comment.reviewId}`,
+                                axios.delete(`/api/project/dashboard/review/${comment._id}`,
                                     {headers: {'Authorization': `Bearer ${localStorage.getItem('isLoggedIn')}`}})
                                     .then((res) => {
-                                        setComments(comments.filter((c) => c.reviewId !== comment.reviewId));
+                                        setComments(comments.filter((c) => c._id !== comment._id));
                                     }).catch(e => {
                                     console.log('댓글 삭제 실패')
                                 })
