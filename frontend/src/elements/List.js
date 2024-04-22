@@ -3,7 +3,7 @@ import {useNavigate} from "react-router-dom";
 import ListIndex from "./ListIndex";
 import propTypes from "prop-types";
 import axios from "axios";
-import {useDispatch, useSelector} from "react-redux";
+import {useDispatch} from "react-redux";
 import {setNoticeNum, setProjectNum, setTaskNum} from "../store/numSlice";
 import {dateFormat} from "../utils/dateFormat";
 
@@ -21,7 +21,6 @@ const List = ({isProject, isDashboard, isTask}) => {
     const [taskList, setTaskList] = useState([]);
 
     const dispatch = useDispatch();
-    // const num = useSelector(state => state.num.projectNum);
     const [projectName, setProjectName] = useState('');
     const [projectDate, setProjectDate] = useState('');
 
@@ -33,7 +32,7 @@ const List = ({isProject, isDashboard, isTask}) => {
                     setProList(res.data.projects);
                     setOriProList(res.data.projects)
                 })
-                .catch(e => {
+                .catch(() => {
                     console.log('프로젝트 리스트 가져오지 못함');
                 });
         } else if (isDashboard) {
@@ -41,19 +40,19 @@ const List = ({isProject, isDashboard, isTask}) => {
                 setProjectName(res.data.project.title);
                 setProjectDate(`${dateFormat(res.data.project.start)} ~ ${dateFormat(res.data.project.end)}`);
 
-            }).catch(e => {
+            }).catch(() => {
                 console.log('대시보드 정보 가져오지 못함');
             });
             axios.get(`/api/project/notice/list/${localStorage.getItem('projectNum')}`).then((res) => {
                 setDashboardList(res.data.notices);
-            }).catch(e => {
+            }).catch(() => {
                 console.log('대시보드 리스트 가져오지 못함')
             })
         } else if (isTask) {
             axios.get(`/api/project/task/list/${localStorage.getItem('projectNum')}`).then((res) => {
                 setTaskList(res.data.tasks);
                 setOriTaskList(res.data.tasks);
-            }).catch(e => {
+            }).catch(() => {
                 console.log('작업 리스트 가져오지 못함')
             })
         }
@@ -124,9 +123,9 @@ const List = ({isProject, isDashboard, isTask}) => {
 
     const onSearch = () => {
         if (isProject) {
-            setProList(oriProList.filter(item => item.projectName.includes(searchText)));
+            setProList(oriProList.filter(item => item.title.includes(searchText)));
         } else if (isTask) {
-            setTaskList(oriTaskList.filter(item => item.content.includes(searchText)));
+            setTaskList(oriTaskList.filter(item => item.title.includes(searchText)));
         }
     }
     return (

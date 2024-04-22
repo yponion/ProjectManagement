@@ -12,10 +12,10 @@ const NoticeForm = ({editing}) => {
 
     useEffect(() => {
         if (editing) {
-            axios.get(`/api/project/dashboard/notice/${localStorage.getItem('noticeNum')}`).then((res) => {
-                setTitle(res.data.data.title);
-                setContent(res.data.data.content);
-            }).catch(e => {
+            axios.get(`/api/project/notice/${localStorage.getItem('noticeNum')}`).then((res) => {
+                setTitle(res.data.notice.title);
+                setContent(res.data.notice.content);
+            }).catch(() => {
                 console.log('글 정보 가져오지 못함')
             })
         }
@@ -24,28 +24,28 @@ const NoticeForm = ({editing}) => {
     const handleSubmit = (e) => {
         e.preventDefault();
         if (editing) { // 수정된 게시글 업데이트 todo
-            axios.put(`/api/project/dashboard/${localStorage.getItem('noticeNum')}`,
-                {title: title, content: content},
-                {headers: {'Authorization': `Bearer ${localStorage.getItem('isLoggedIn')}`}}).then((res) => {
+            axios.put(`/api/project/notice/edit/${localStorage.getItem('noticeNum')}`,
+                {title, content},
+                {headers: {'Authorization': `Bearer ${localStorage.getItem('isLoggedIn')}`}}).then(() => {
                 navigate('/project/dashboard/post');
                 addToast({
                     text: title + ' 수정됨'
                 })
 
-            }).catch(e => {
+            }).catch(() => {
                 console.log('게시글 업데이트 실패')
             })
         } else {
             axios.post(`/api/project/notice/create/${localStorage.getItem('projectNum')}`, {
                 title,
                 content
-            }, {headers: {'Authorization': `Bearer ${localStorage.getItem('isLoggedIn')}`}}).then((res) => {
+            }, {headers: {'Authorization': `Bearer ${localStorage.getItem('isLoggedIn')}`}}).then(() => {
                 navigate('/project/dashboard');
                 addToast({
                     text: title + ' 등록됨'
                 })
 
-            }).catch(e => {
+            }).catch(() => {
                 console.log('글쓰기 post error')
             })
 

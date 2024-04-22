@@ -4,8 +4,6 @@ import {logout} from "../store/authSlice";
 import {hide, show} from "../store/boxSlice";
 import logo from '../images/logo.png';
 import user from '../images/user.png';
-import axios from "axios";
-import {useEffect, useState} from "react";
 
 const NavBar = () => {
     const location = useLocation();
@@ -13,17 +11,6 @@ const NavBar = () => {
     const showBox = useSelector(state => state.box.showBox);
     const dispatch = useDispatch();
     const navigate = useNavigate();
-
-    // const isLeader = () => {
-    //     axios.get(`/api/project/pm/${localStorage.getItem('projectNum')}`, {headers: {'Authorization': `Bearer ${localStorage.getItem('isLoggedIn')}`}})
-    //         .then((res) => {
-    //             return res.data.result;
-    //         })
-    //         .catch(e => {
-    //             console.log('유저 정보 가져오지 못함');
-    //         });
-    //     return false;
-    // }
 
     return (
         <nav>

@@ -1,6 +1,6 @@
 const {Router} = require('express');
 const projectRouter = Router();
-const {User, Project} = require('../models')
+const {User, Project, Notice, Comment, Task} = require('../models')
 const {verifyToken} = require('../utils/jwt')
 const {isValidObjectId} = require("mongoose");
 
@@ -57,21 +57,6 @@ projectRouter.get('/', async (req, res) => {
     }
 })
 
-// // api 대시보드 리스트 가져오기
-// projectRouter.get('/dashboard/:projectId/notice', async (req, res) => {
-//     try {
-//         const {projectId} = req.params
-//         if (!projectId) return res.status(400).send({err: 'projectId is required'})
-//
-//         const project = await Project.findOne({_id: projectId})
-//         await console.log(project)
-//         // return res.send({project.})
-//         // todo 대시보드 생성부터 ㄱㄱ
-//     } catch (err) {
-//         console.error(err)
-//     }
-// })
-
 // api 프로젝트 가져오기
 projectRouter.get('/:projectId', async (req, res) => {
     try {
@@ -79,6 +64,68 @@ projectRouter.get('/:projectId', async (req, res) => {
         if (!isValidObjectId(projectId)) return res.status(400).send({err: "projectId is invalid"})
         const project = await Project.findOne({_id: projectId})
         return res.send({project})
+    } catch (err) {
+        console.error(err)
+    }
+})
+
+// api 프로젝트 관리자 승인
+projectRouter.get('/pm/:projectId', async (req, res) => {
+    try {
+        const {projectId} = req.params
+        if (!isValidObjectId(projectId)) return res.status(400).send({err: "projectId is invalid"})
+        const project = await Project.findOne({_id: projectId})
+        const email = await verifyToken(req.headers.authorization).email
+
+        if (project.leader === email) return res.send({result: true})
+        else return res.send({result: false})
+    } catch (err) {
+        console.error(err)
+    }
+})
+
+// api 프로젝트 수정
+projectRouter.put('/edit/:projectId', async (req, res) => {
+    try {
+        const {projectId} = req.params
+        if (!isValidObjectId(projectId)) return res.status(400).send({err: 'projectId is invalid'})
+        const {title, type, start, end, memberList} = req.body
+
+        await Project.updateOne({_id: projectId}, {$set: {title, type, start, end, memberList}})
+
+        return res.send({result: 'successful edit project'})
+    } catch (err) {
+        console.log(err)
+    }
+})
+
+// api 프로젝트 리더 변경
+projectRouter.put('/edit/leader/:projectId', async (req, res) => {
+    try {
+        const {projectId} = req.params
+        if (!isValidObjectId(projectId)) return res.status(400).send({err: 'projectId is invalid'})
+        const {leader} = req.body
+        if (!leader) return res.status(400).send({err: 'leader is required'})
+
+        await Project.updateOne({_id: projectId}, {$set: {leader}})
+        return res.send({result: 'successful change leader'})
+    } catch (err) {
+        console.log(err)
+    }
+})
+
+// api 프로젝트 삭제
+projectRouter.delete('/:projectId', async (req, res) => {
+    try {
+        const {projectId} = req.params
+        if (!isValidObjectId(projectId)) return res.status(400).send({err: "projectId is invalid"})
+        await Promise.all([
+            Project.deleteOne({_id: projectId}),
+            Notice.deleteMany({project: projectId}),
+            Comment.deleteMany({project: projectId}),
+            Task.deleteMany({project: projectId}),
+        ])
+        return res.send({result: 'successful delete project'})
     } catch (err) {
         console.error(err)
     }

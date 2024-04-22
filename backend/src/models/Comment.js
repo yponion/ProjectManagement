@@ -5,6 +5,7 @@ const CommentSchema = new Schema({
     name: {type: String, require: true},
     email: {type: String, require: true},
     notice: {type: ObjectId, require: true},
+    project: {type: ObjectId, require: true},
 }, {timestamps: true})
 
 const Comment = model('comment', CommentSchema)

@@ -14,10 +14,10 @@ const initialState = {
     isLoggedIn: localStorageLoggedIn()
 }
 
-const authSlice = createSlice({ //createSlice를 통해 state를 정의
+const authSlice = createSlice({ //createSlice 를 통해 state 를 정의
     name: 'auth',
     initialState,
-    reducers: { // state를 변경하는 함수가 들어감
+    reducers: { // state 를 변경하는 함수가 들어감
         loginF: (state, action) => {
             const token = action.payload;
             localStorage.setItem('isLoggedIn', token); // 로컬스토리지에 로그인 되었다고 저장

@@ -4,10 +4,10 @@ const initialState = {
     showBox: false
 }
 
-const boxSlice = createSlice({ //createSlice를 통해 state를 정의
+const boxSlice = createSlice({ //createSlice 를 통해 state 를 정의
     name: 'box',
     initialState,
-    reducers: { // state를 변경하는 함수가 들어감
+    reducers: { // state 를 변경하는 함수가 들어감
         show:(state) =>{
             state.showBox = true;
         },

@@ -18,7 +18,7 @@ const ProjectTimelinePage = () => {
             setProjectName(res.data.project.title);
             setProjectStart(dateFormat(res.data.project.start));
             setProjectEnd(dateFormat(res.data.project.end));
-        }).catch(e => {
+        }).catch(() => {
             console.log('대시보드 정보 가져오지 못함');
         });
 
@@ -27,7 +27,7 @@ const ProjectTimelinePage = () => {
                 new Date(a.startDate) - new Date(b.startDate)
             );
             setTaskList(sortedTasks);
-        }).catch(e => {
+        }).catch(() => {
             console.log('작업 리스트 가져오지 못함')
         })
     }, []);

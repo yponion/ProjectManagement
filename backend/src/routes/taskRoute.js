@@ -30,4 +30,42 @@ taskRouter.get('/list/:projectId', async (req, res) => {
     return res.send({tasks});
 })
 
+taskRouter.get('/:taskId', async (req, res) => {
+    try {
+        const {taskId} = req.params
+        if (!isValidObjectId(taskId)) return res.status(400).send({err: 'taskId is invalid'})
+
+        const task = await Task.findOne({_id: taskId})
+        return res.send({task});
+    } catch (err) {
+        console.error(err)
+    }
+})
+
+taskRouter.put('/edit/:taskId', async (req, res) => {
+    try {
+        const {taskId} = req.params
+        if (!isValidObjectId(taskId)) return res.status(400).send({err: 'taskId is invalid'})
+        const {title, memo, start, end} = req.body
+
+        await Task.updateOne({_id: taskId}, {$set: {title, memo, start, end}})
+        return res.send({result: 'successful edit task'});
+    } catch (err) {
+        console.error(err)
+    }
+})
+
+taskRouter.delete('/delete/:taskId', async (req, res) => {
+    try {
+        const {taskId} = req.params
+        if (!isValidObjectId(taskId)) return res.status(400).send({err: 'taskId is invalid'})
+
+        await Task.deleteOne({_id: taskId})
+        return res.send({result: 'successful edit task'});
+    } catch (err) {
+        console.error(err)
+    }
+})
+
+
 module.exports = {taskRouter}

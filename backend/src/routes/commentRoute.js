@@ -6,9 +6,9 @@ const {verifyToken} = require("../utils/jwt");
 
 commentRouter.post('/:noticeId', async (req, res) => {
     try {
-        const {content} = req.body
+        const {content, projectId} = req.body
         if (!content) return res.status(400).send("content is required")
-
+        if (!projectId) return res.status(400).send("projectId is required")
         const {noticeId} = req.params
         if (!isValidObjectId(noticeId)) return res.status(400).send({err: "noticeId is invalid"})
         const user = await verifyToken(req.headers.authorization)
@@ -18,6 +18,7 @@ commentRouter.post('/:noticeId', async (req, res) => {
             name: user.name,
             email: user.email,
             notice: noticeId,
+            project: projectId,
         })
         await comment.save()
         return res.send({comment})
@@ -33,6 +34,18 @@ commentRouter.get('/list/:noticeId', async (req, res) => {
 
         const comments = await Comment.find({notice: noticeId})
         return res.send({comments})
+    } catch (err) {
+        console.error(err)
+    }
+})
+
+commentRouter.delete('/:commentId', async (req, res) => {
+    try {
+        const {commentId} = req.params
+        if (!isValidObjectId(commentId)) return res.status(400).send({err: "commentId is invalid"})
+
+        await Comment.deleteOne({_id: commentId})
+        return res.send({result: 'successful delete comment'})
     } catch (err) {
         console.error(err)
     }

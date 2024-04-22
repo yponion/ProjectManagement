@@ -3,6 +3,7 @@ import {useEffect, useState} from "react";
 import propTypes from "prop-types";
 import axios from "axios";
 import useToast from "../hooks/toast";
+import {dateFormat} from "../utils/dateFormat";
 
 const ProjectForm = ({editing}) => {
     const navigate = useNavigate();
@@ -24,36 +25,36 @@ const ProjectForm = ({editing}) => {
                     setIsAdmin(res.data.result);
                     setLoading(false);
                 })
-                .catch(e => {
+                .catch(() => {
                     console.log('유저 정보 가져오지 못함');
                 });
 
             // 프로젝트 수정 : 데이터 가져오기
             axios.get(`/api/project/${localStorage.getItem('projectNum')}`).then((res) => {
-                setTitle(res.data.data.projectName);
-                setType(res.data.data.type);
-                setStart(res.data.data.startDate);
-                setEnd(res.data.data.lastDate);
-                setMemberList(res.data.data.memberEmail);
-                setLeaderEmail(res.data.data.leaderEmail);
-            }).catch(e => {
+                setTitle(res.data.project.title);
+                setType(res.data.project.type);
+                setStart(dateFormat(res.data.project.start));
+                setEnd(dateFormat(res.data.project.end));
+                setLeaderEmail(res.data.project.leader);
+                setMemberList(res.data.project.memberList);
+            }).catch(() => {
                 console.log('프로젝트 수정페이지 받아오지 못함');
             })
         }
     }, []);
 
 
-    const update = ({flag, member}) => { // flag가 true이면 프로젝트 수정 후 리더 변경, false 이면 프로젝트 수정
+    const update = ({flag, member}) => { // flag 가 true 이면 프로젝트 수정 후 리더 변경, false 이면 프로젝트 수정
         if (editing) { // 프로젝트 수정 페이지 submit
             // 프로젝트 수정
-            axios.put(`/api/project/${localStorage.getItem('projectNum')}`,
+            axios.put(`/api/project/edit/${localStorage.getItem('projectNum')}`,
                 {
-                    projectName: title,
-                    type: type,
-                    startDate: start,
-                    lastDate: end,
-                    memberList: memberList,
-                }).then((res) => {
+                    title,
+                    type,
+                    start,
+                    end,
+                    memberList,
+                }).then(() => {
                 navigate('/project/dashboard');
                 addToast({
                     text: title + ' 프로젝트 수정됨'
@@ -61,16 +62,18 @@ const ProjectForm = ({editing}) => {
 
                 if (flag) {
                     // 리더 변경
-                    axios.put(`/api/project/leader/${localStorage.getItem('projectNum')}`, {changeLeaderEmail: member}).then((res) => {
-                        navigate('/project/dashboard');
-                        addToast({
-                            text: title + ' 프로젝트 리더 변경됨'
-                        });
-                    }).catch(e => {
+                    axios.put(`/api/project/edit/leader/${localStorage.getItem('projectNum')}`,
+                        {leader: member})
+                        .then(() => {
+                            navigate('/project/dashboard');
+                            addToast({
+                                text: title + ' 프로젝트 리더 변경됨'
+                            });
+                        }).catch(() => {
                         console.log('리더 변경 실패');
                     })
                 }
-            }).catch(e => {
+            }).catch(() => {
                 console.log('프로젝트 수정 실패');
             })
         } else { // 프로젝트 생성 페이지 submit
@@ -80,14 +83,14 @@ const ProjectForm = ({editing}) => {
                     type,
                     start,
                     end,
-                    memberList: memberList
+                    memberList,
                 },
-                {headers: {'Authorization': `Bearer ${localStorage.getItem('isLoggedIn')}`}}).then((res) => {
+                {headers: {'Authorization': `Bearer ${localStorage.getItem('isLoggedIn')}`}}).then(() => {
                 navigate('/project')
                 addToast({
                     text: title + ' 프로젝트 생성됨'
                 })
-            }).catch(e => {
+            }).catch(() => {
                 console.log('프로젝트 생성 실패')
             })
         }
@@ -239,7 +242,6 @@ const ProjectForm = ({editing}) => {
                                             } else { // 회원명단에 없는 경우
                                                 // 추가할 회원의 이메일 확인
                                                 axios.get(`/api/project/create/${email}`).then((res) => {
-                                                    console.log(res.data.result)
                                                     if (res.data.result === 'exist') { // db에 이메일이 있을 경우
                                                         setMemberList([...memberList, email]);
                                                         setEmail('');
@@ -250,7 +252,7 @@ const ProjectForm = ({editing}) => {
                                                         inputEmail.style.border = '1px solid red';
                                                         inputEmail.placeholder = '정확한 이메일을 입력해 주세요';
                                                     }
-                                                }).catch(e => { // 못가져 왔을 경우 예외처리
+                                                }).catch(() => { // 못가져 왔을 경우 예외처리
                                                     console.log('유저 정보 요청 실패')
                                                 })
                                             }
@@ -284,12 +286,12 @@ const ProjectForm = ({editing}) => {
                             value="삭제"
                             onClick={() => {
                                 // 프로젝트 삭제
-                                axios.delete(`/api/project/${localStorage.getItem('projectNum')}`).then((res) => {
+                                axios.delete(`/api/project/${localStorage.getItem('projectNum')}`).then(() => {
                                     navigate('/project');
                                     addToast({
                                         text: title + ' 프로젝트 삭제됨'
                                     });
-                                }).catch(e => {
+                                }).catch(() => {
                                     console.log('프로젝트 삭제 실패')
                                 })
                             }}
@@ -306,12 +308,12 @@ const ProjectForm = ({editing}) => {
                     <h1>프로젝트 나가기</h1>
                     <button className="del-common" onClick={() => {
                         // 프로젝트 나가기
-                        axios.delete(`/api/project/withdrawal/${localStorage.getItem('projectNum')}`, {headers: {'Authorization': `Bearer ${localStorage.getItem('isLoggedIn')}`}}).then((res) => {
+                        axios.delete(`/api/project/withdrawal/${localStorage.getItem('projectNum')}`, {headers: {'Authorization': `Bearer ${localStorage.getItem('isLoggedIn')}`}}).then(() => {
                             navigate('/project');
                             addToast({
                                 text: title + ' 프로젝트에서 나감'
                             });
-                        }).catch(e => {
+                        }).catch(() => {
                             console.log('프로젝트 나가기 실패');
                         })
                     }}>나가기

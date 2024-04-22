@@ -3,7 +3,6 @@ import {useDispatch} from "react-redux";
 import {loginF} from "../store/authSlice";
 import {useNavigate} from "react-router-dom";
 import axios from "axios";
-import useToast from "../hooks/toast";
 
 
 const LoginPage = () => {
@@ -22,7 +21,6 @@ const LoginPage = () => {
     const [signupEmailCheck, setSignupEmailCheck] = useState(false);
     const [signupPasswordCheck, setSignupPasswordCheck] = useState(false);
     const [signupPasswordPatternCheck, setSignupPasswordPatternCheck] = useState(false);
-    const {addToast} = useToast();
 
     // 정규 표현식 패턴
     const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&+=!]).{8,20}$/;
@@ -64,7 +62,7 @@ const LoginPage = () => {
                     } else {
                         setSignupEmailCheck(true); // 이메일 중복 p태그 보여줌
                     }
-                }).catch(e => {
+                }).catch(() => {
                     console.log('비밀번호 수정 못함')
                 })
             } else {
@@ -84,10 +82,7 @@ const LoginPage = () => {
                 <div className="form-container sign-in">
                     <form onSubmit={handleLoginSubmit}>
                         <h1>로그인</h1>
-                        <input style={{
-                            textTransform: 'lowercase'
-                        }}
-                               type="email" placeholder="이메일" required={true}
+                        <input type="email" placeholder="이메일" required={true}
                                value={loginEmail} onChange={(e) => setLoginEmail(e.target.value.toLowerCase())}/>
                         <input type="password" placeholder="비밀번호" required={true}
                                value={loginPassword} onChange={(e) => setLoginPassword(e.target.value)}/>

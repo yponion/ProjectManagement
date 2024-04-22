@@ -33,7 +33,7 @@ const Toast = ({toasts, deleteToast}) => {
                 return (
                     <div
                         key={toast.id}
-                        // onClick엔 함수가 들어가야함. deleteToast가 함수니까 이렇게 넣으면 되는데 deleteToast()이건 함수를 실행시키는 거기때문에 ()=> 사용
+                        // onClick 엔 함수가 들어가야함. deleteToast 가 함수니까 이렇게 넣으면 되는데 deleteToast()이건 함수를 실행시키는 거기때문에 ()=> 사용
                         onClick={() => {
                             deleteToast(toast.id)
                         }}
@@ -49,7 +49,7 @@ const Toast = ({toasts, deleteToast}) => {
 }
 
 Toast.propType = {
-    // toasts라는 array를 받을 건데 array안에 object가 들어감 각각의 object안에 text가 들어감 //[{text:'text'}, {}, ]
+    // toasts 라는 array 를 받을 건데 array 안에 object 가 들어감 각각의 object 안에 text 가 들어감 //[{text:'text'}, {}, ]
     toasts: propTypes.arrayOf(propTypes.shape({
         text: propTypes.string,
         type: propTypes.string

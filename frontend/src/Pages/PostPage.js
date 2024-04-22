@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import axios from "axios";
-import {useSelector} from "react-redux";
 import useToast from "../hooks/toast";
 import {dateFormat} from '../utils/dateFormat'
 
@@ -19,21 +18,15 @@ const PostPage = () => {
 
     const addComment = () => {
         axios.post(`/api/project/comment/${localStorage.getItem('noticeNum')}`,
-            {content: newComment},
+            {content: newComment, projectId: localStorage.getItem('noticeNum')},
             {headers: {'Authorization': `Bearer ${localStorage.getItem('isLoggedIn')}`}}).then((res) => {
-            setComments([...comments, {
-                content: res.data.comment.content,
-                name: res.data.comment.name,
-                date: dateFormat(res.data.comment.createdAt),
-                notice: res.data.comment.notice,
-                email: res.data.comment.email,
-            }]);
+            setComments([...comments, res.data.comment]);
             setNewComment('');
             window.scrollTo({
                 top: document.body.scrollHeight,
                 behavior: 'smooth',
             });
-        }).catch(e => {
+        }).catch(() => {
             console.log('댓글 작성 실패')
         })
 
@@ -46,21 +39,21 @@ const PostPage = () => {
             setWriter(res.data.notice.name);
             setDate(dateFormat(res.data.notice.createdAt));
             setWriterEmail(res.data.notice.email);
-        }).catch(e => {
+        }).catch(() => {
             console.log('글 정보 받아오기 실패');
         })
 
         // 댓글 받아오기
         axios.get(`/api/project/comment/list/${localStorage.getItem('noticeNum')}`).then((res) => {
             setComments(res.data.comments);
-        }).catch(e => {
+        }).catch(() => {
             console.log('댓글 받아오기 실패');
         })
 
         // 이메일 받아오기
-        axios.get('/api/user/info', {headers: {'Authorization': `Bearer ${localStorage.getItem('isLoggedIn')}`}}).then((res) => { // get으로 가져옴
+        axios.get('/api/user/info', {headers: {'Authorization': `Bearer ${localStorage.getItem('isLoggedIn')}`}}).then((res) => { // get 으로 가져옴
             setEmail(res.data.user.email);
-        }).catch(e => { // 못가져 왔을 경우 예외처리
+        }).catch(() => { // 못가져 왔을 경우 예외처리
             console.log('이메일 받아오지 못함');
         })
     }, []);
@@ -165,14 +158,13 @@ const PostPage = () => {
                     <span style={styles.commentDate}>{writer === null ? '알수없음' : writer} / {date}</span>
                     {writerEmail === email && <button style={styles.xButton} onClick={() => {
                         // 게시글 삭제
-                        axios.delete(`/api/project/dashboard/${localStorage.getItem('noticeNum')}`, {headers: {'Authorization': `Bearer ${localStorage.getItem('isLoggedIn')}`}})
-                            .then((res) => {
+                        axios.delete(`/api/project/notice/${localStorage.getItem('noticeNum')}`, {headers: {'Authorization': `Bearer ${localStorage.getItem('isLoggedIn')}`}})
+                            .then(() => {
                                 navigate('/project/dashboard');
                                 addToast({
                                     text: title + ' 삭제됨'
                                 })
-
-                            }).catch(e => {
+                            }).catch(() => {
                             console.log('게시물 삭제 못함')
                         })
                     }}>지우기
@@ -192,15 +184,15 @@ const PostPage = () => {
                     >
                         <strong>{comment.name === null ? '알수없음' : comment.name}</strong>: <span
                         style={styles.commentContent}>{comment.content}</span>
-                        <span style={styles.commentDate}>{comment.date}</span>
+                        <span style={styles.commentDate}>{dateFormat(comment.createdAt)}</span>
                         {(comment.email === email) && <button
                             style={styles.xButton}
                             onClick={() => {
-                                axios.delete(`/api/project/dashboard/review/${comment._id}`,
+                                axios.delete(`/api/project/comment/${comment._id}`,
                                     {headers: {'Authorization': `Bearer ${localStorage.getItem('isLoggedIn')}`}})
-                                    .then((res) => {
+                                    .then(() => {
                                         setComments(comments.filter((c) => c._id !== comment._id));
-                                    }).catch(e => {
+                                    }).catch(() => {
                                     console.log('댓글 삭제 실패')
                                 })
                             }}>X</button>}
