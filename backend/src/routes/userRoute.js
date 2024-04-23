@@ -5,9 +5,10 @@ const {User} = require('../models')
 const {hashPassword, checkPassword} = require('../utils/passwordUtils')
 const {generateToken, verifyToken} = require('../utils/jwt');
 
-// api 로그인
+// api 회원가입
 userRouter.post('/signup', async (req, res) => {
     try {
+
         let {name, email, password} = req.body;
         if (!name) return res.status(400).send({err: "name is required"});
         if (!email) return res.status(400).send({err: "email is required"});
@@ -29,14 +30,14 @@ userRouter.post('/signup', async (req, res) => {
     }
 })
 
-// api 회원가입
+// api 로그인
 userRouter.post('/signin', async (req, res) => {
     try {
         const {email, password} = req.body
         if (!email) return res.status(400).send({err: "email is required"});
         if (!password) return res.status(400).send({err: "password is required"});
 
-        const existingUser = await User.findOne({email: email});
+        const existingUser = await User.findOne({email});
         if (!existingUser) return res.status(200).send({result: "fail"})
         if (!await checkPassword(password, existingUser.password)) return res.status(200).send({result: "fail"})
 

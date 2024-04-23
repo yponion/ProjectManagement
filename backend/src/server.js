@@ -2,6 +2,7 @@ const express = require('express')
 const app = express()
 const {userRouter, projectRouter, noticeRouter, commentRouter, taskRouter} = require('./routes')
 const mongoose = require('mongoose')
+const {generateFakeData} = require('./faker')
 // const cors = require('cors')
 
 const server = async () => {
@@ -25,7 +26,7 @@ const server = async () => {
 
         app.listen(BACK_PORT, async () => {
             console.log(`server listening on port ${BACK_PORT}`)
-
+            // generateFakeData(10, 10, 10, 10, 10)
         })
     } catch (err) {
         console.log(err)
