@@ -147,9 +147,8 @@ const UserPage = () => {
                 <br/><br/>
                 <button
                     className="del-common"
-                    onClick={() => { // 회원 탈퇴 todo
-                        axios.delete('/api/members/withdrawal', {headers: {'Authorization': `Bearer ${localStorage.getItem('isLoggedIn')}`}}).then((res) => {
-                            console.log(res);
+                    onClick={() => {
+                        axios.delete('/api/user/withdraw', {headers: {'Authorization': `Bearer ${localStorage.getItem('isLoggedIn')}`}}).then(() => {
                             dispatch(logout());
                             navigate('/login');
                         }).catch(() => {

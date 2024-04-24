@@ -308,7 +308,7 @@ const ProjectForm = ({editing}) => {
                     <h1>프로젝트 나가기</h1>
                     <button className="del-common" onClick={() => {
                         // 프로젝트 나가기
-                        axios.delete(`/api/project/withdrawal/${localStorage.getItem('projectNum')}`, {headers: {'Authorization': `Bearer ${localStorage.getItem('isLoggedIn')}`}}).then(() => {
+                        axios.put(`/api/project/getout/${localStorage.getItem('projectNum')}`, {}, {headers: {'Authorization': `Bearer ${localStorage.getItem('isLoggedIn')}`}}).then(() => {
                             navigate('/project');
                             addToast({
                                 text: title + ' 프로젝트에서 나감'
