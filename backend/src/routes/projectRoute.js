@@ -131,6 +131,24 @@ projectRouter.delete('/:projectId', async (req, res) => {
     }
 })
 
+// api 프로젝트 나가기
+projectRouter.put('/getout/:projectId', async (req, res) => {
+    try {
+        const {projectId} = req.params
+        if (!isValidObjectId(projectId)) return res.status(400).send({err: "projectId is invalid"})
+
+        const email = await verifyToken(req.headers.authorization).email
+        const project = await Project.findOne({_id: projectId})
+
+        project.memberList = project.memberList.filter(memberList => memberList !== email)
+        project.save()
+
+        return res.send({result: 'successful get out project'})
+    } catch (err) {
+        console.error(err)
+    }
+})
+
 module.exports = {
     projectRouter
 }

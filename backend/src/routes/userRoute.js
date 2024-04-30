@@ -85,15 +85,20 @@ userRouter.put('/info', async (req, res) => {
     }
 })
 
-// userRouter.post('/test', async (req, res) => {
-//     try {
-//         const {token} = req.body
-//         if (!verifyToken(token)) return res.status(400).send({msg: "Invalid token"})
-//         return res.status(200).send({msg: "success"})
-//     } catch (err) {
-//         console.error(err)
-//     }
-// })
+// api 회원 탈퇴
+userRouter.delete('/withdraw', async (req, res) => {
+    try {
+        const email = await verifyToken(req.headers.authorization).email
+        const user = await User.findOne({email})
+        console.log(user)
+
+        // todo
+
+        return res.status(200).send({msg: "successful withdraw"})
+    } catch (err) {
+        console.error(err)
+    }
+})
 
 module.exports = {
     userRouter
