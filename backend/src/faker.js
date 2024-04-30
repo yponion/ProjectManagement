@@ -23,9 +23,12 @@ generateFakeData = async (userCount, projectsPerUser, noticesPerProject, comment
     for (let i = 0; i < userCount; i++) {
         users.push(
             new User({
-                name: faker.name.findName(),
-                email: `email${i}@naver.com`,
-                password: await hashPassword('qw12QW!@')
+                // name: faker.name.findName(),
+                // email: `email${i}@naver.com`,
+                // password: await hashPassword('qw12QW!@')
+                name: `${i}`,
+                email: `${i}@${i}`,
+                password: await hashPassword(`${i}`)
             })
         );
     }

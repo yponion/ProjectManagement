@@ -1,9 +1,10 @@
 const {Router} = require('express');
 const userRouter = Router();
-const {User} = require('../models')
+const {User, Notice, Comment, Task} = require('../models')
 // const mongoose = require('mongoose');
 const {hashPassword, checkPassword} = require('../utils/passwordUtils')
 const {generateToken, verifyToken} = require('../utils/jwt');
+const {Project} = require("../models/Project");
 
 // api 회원가입
 userRouter.post('/signup', async (req, res) => {
@@ -39,6 +40,7 @@ userRouter.post('/signin', async (req, res) => {
 
         const existingUser = await User.findOne({email});
         if (!existingUser) return res.status(200).send({result: "fail"})
+        if (existingUser.password === null) return res.status(200).send({result: "fail"})
         if (!await checkPassword(password, existingUser.password)) return res.status(200).send({result: "fail"})
 
         const payload = {
@@ -90,9 +92,31 @@ userRouter.delete('/withdraw', async (req, res) => {
     try {
         const email = await verifyToken(req.headers.authorization).email
         const user = await User.findOne({email})
-        console.log(user)
 
-        // todo
+        // 해당 email은 재가입 안되게 놔두고, 이름과 password의 값을 null으로
+        await Promise.all([
+            user.name = null,
+            user.password = null,
+            Project.updateMany({memberList: email}, {$pull: {memberList: email}}),
+        ])
+        await user.save()
+
+        // 본인이 리더인 프로젝트 삭제, 해당 프로젝트의 작업, 공지, 댓글 삭제
+        const projectIds = await Project.find({leader: email}, {_id: 1})
+        for (let i = 0; i < projectIds.length; i++) {
+            await Promise.all([
+                Project.deleteOne({_id: projectIds}),
+                Notice.deleteMany({project: projectIds}),
+                Comment.deleteMany({project: projectIds}),
+                Task.deleteMany({project: projectIds}),
+            ])
+        }
+
+        // notice와 comment에 내포된 name과 email을 null으로 변경
+        await Promise.all([
+            Notice.updateMany({email}, {$set: {email: null, name: null}}),
+            Comment.updateMany({email}, {$set: {email: null, name: null}}),
+        ])
 
         return res.status(200).send({msg: "successful withdraw"})
     } catch (err) {
